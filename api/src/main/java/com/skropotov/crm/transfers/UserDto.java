@@ -7,6 +7,7 @@ import com.skropotov.crm.models.Status;
 import com.skropotov.crm.models.User;
 
 public class UserDto {
+	private Long userId;
 	private String username;
 	private String firstName;
 	private String lastName;
@@ -18,9 +19,10 @@ public class UserDto {
 	public static UserDto from(User user) {
 		ArrayList<String> roles = new ArrayList<>();
 		user.getRoles().stream().forEach(x -> roles.add(x.getAuthority()));
-		return new UserDto(user.getUsername(), user.getFirstName(), user.getLastName(), "", user.getStatus(), user.getVersion(), roles);
+		return new UserDto(user.getId(), user.getUsername(), user.getFirstName(), user.getLastName(), "", user.getStatus(), user.getVersion(), roles);
 	}
-	public UserDto(String username, String firstName, String lastName, String password, Status status, Integer version, List<String> roles) {
+	public UserDto(Long userId, String username, String firstName, String lastName, String password, Status status, Integer version, List<String> roles) {
+		this.userId = userId;
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -87,5 +89,13 @@ public class UserDto {
 	
 	public void setVersion(Integer version) {
 		this.version = version;
+	}
+	
+	public Long getUserId() {
+		return userId;
+	}
+	
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 }
