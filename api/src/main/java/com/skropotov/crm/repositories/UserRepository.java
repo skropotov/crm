@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.skropotov.crm.models.Status;
 import com.skropotov.crm.models.User;
 
 public interface UserRepository extends CrudRepository<User, Long> {
