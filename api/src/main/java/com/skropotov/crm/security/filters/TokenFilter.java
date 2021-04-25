@@ -22,13 +22,11 @@ public class TokenFilter implements Filter {
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         String token = request.getHeader("token");
-        //String token = request.getParameter("token");
-
-        TokenAuthentication tokenAuthentication = new TokenAuthentication(token);
-        if (token == null) {
-            tokenAuthentication.setAuthenticated(false);
-        } else {
-            SecurityContextHolder.getContext().setAuthentication(tokenAuthentication);
+        if (token != null) {
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            	TokenAuthentication tokenAuthentication = new TokenAuthentication(token);
+            	SecurityContextHolder.getContext().setAuthentication(tokenAuthentication);
+            }
         }
         filterChain.doFilter(servletRequest, servletResponse);
 	}

@@ -5,6 +5,8 @@ import javax.persistence.EntityNotFoundException;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +29,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    
 	@Override
 	public TokenDto login(LoginForm loginForm) {
         User user = userRepository.findByUsername(loginForm.getLogin()).orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -46,6 +48,12 @@ public class LoginServiceImpl implements LoginService {
 
     	tokenRepository.save(token);
     	return from(token);
+	}
+
+	@Override
+	public User currentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return ((User)authentication.getPrincipal());
 	}
 
 

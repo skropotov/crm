@@ -1,6 +1,5 @@
 package com.skropotov.crm.services;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -35,7 +34,6 @@ public class UsersServiceImpl implements UsersService {
 		user.setUsername(userDto.getUsername());
 		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		user.setStatus(userDto.getStatus());
-		user.setLastModified(new Date());
 		
 		HashSet<Role> roles = new HashSet<Role>();
 		for(String roleName : userDto.getRoles()) {
@@ -68,14 +66,16 @@ public class UsersServiceImpl implements UsersService {
 	public void createUser(UserDto userDto) {
 		User user = new User();
 		fillUser(user, userDto);
-		user.setCreated(new Date());
 		userRepository.save(user);
 	}
 	
 	@Override
 	public void editUser(Long userId, UserDto userDto) {
+		User savedUser = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
 		User user = new User();
 		user.setId(userId);
+		user.setCreatedBy(savedUser.getCreatedBy());
+		user.setCreated(savedUser.getCreated());
 		fillUser(user, userDto);
 		user.setVersion(userDto.getVersion());
 		userRepository.save(user);

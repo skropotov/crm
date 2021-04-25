@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,13 +22,14 @@ import com.skropotov.crm.models.Role;
 import com.skropotov.crm.models.User;
 import com.skropotov.crm.repositories.RoleRepository;
 import com.skropotov.crm.repositories.UserRepository;
+import com.skropotov.crm.security.providers.AuditorAwareImpl;
 
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.skropotov.crm")
 @EnableJpaRepositories(basePackages = "com.skropotov.crm.repositories")
 @EntityScan(basePackages = "com.skropotov.crm.models")
-
+@EnableJpaAuditing
 public class CrmApplication {
 
     @Bean
@@ -42,6 +45,11 @@ public class CrmApplication {
 				registry.addMapping("/**");
 			}
 		};
+	}
+
+	@Bean
+	public AuditorAware<String> auditorProvider() {
+		return new AuditorAwareImpl(); 
 	}
     
 	public static void main(String[] args) {
