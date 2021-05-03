@@ -1,7 +1,8 @@
 package com.skropotov.crm.services;
 
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
@@ -35,10 +36,10 @@ public class UsersServiceImpl implements UsersService {
 		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 		user.setStatus(userDto.getStatus());
 		
-		HashSet<Role> roles = new HashSet<Role>();
-		for(String roleName : userDto.getRoles()) {
-			roles.add(roleRepository.findByName(roleName).orElseThrow(() -> new EntityNotFoundException("Role " + roleName + " not found")));
-		}
+		Set<Role> roles = userDto.getRoles().stream()
+			.map(s -> roleRepository.findByName(s).orElseThrow(() -> new EntityNotFoundException("Role " + s + " not found")))
+			.collect(Collectors.toSet());
+		
 		user.setRoles(roles);
 	}
 	
@@ -54,7 +55,7 @@ public class UsersServiceImpl implements UsersService {
 
 	@Override
 	public void deleteUser(Long userId) {
-		User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+		User user = findOne(userId);
 		if (user.getStatus() == Status.DELETED) {
 			throw new PersistenceException("User already deleted");
 		}
@@ -71,7 +72,7 @@ public class UsersServiceImpl implements UsersService {
 	
 	@Override
 	public void editUser(Long userId, UserDto userDto) {
-		User savedUser = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+		User savedUser = findOne(userId);
 		User user = new User();
 		user.setId(userId);
 		user.setCreatedBy(savedUser.getCreatedBy());
@@ -88,7 +89,7 @@ public class UsersServiceImpl implements UsersService {
 
 	@Override
 	public void activateUser(Long userId) {
-		User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+		User user = findOne(userId);
 		if (user.getStatus() == Status.ACTIVE) {
 			throw new PersistenceException("User already active");
 		}
@@ -98,7 +99,7 @@ public class UsersServiceImpl implements UsersService {
 
 	@Override
 	public void inactivateUser(Long userId) {
-		User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+		User user = findOne(userId);
 		if (user.getStatus() == Status.INACTIVE) {
 			throw new PersistenceException("User already inactive");
 		}

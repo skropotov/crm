@@ -1,7 +1,7 @@
 package com.skropotov.crm.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,9 +25,9 @@ public class UsersController {
 	
 	@GetMapping("/users")
 	public List<UserDto> getUsers() {
-		List<UserDto> usersDto = new ArrayList<>();
-		userService.findNonDeletedUsers().stream().forEach(x -> usersDto.add(from(x)));
-		return usersDto;
+		return userService.findNonDeletedUsers().stream()
+				.map(x -> UserDto.from(x))
+				.collect(Collectors.toList());
 	}
 	
 	@GetMapping("/users/{user-id}")
