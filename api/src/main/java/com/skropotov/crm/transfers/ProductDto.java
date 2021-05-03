@@ -7,18 +7,19 @@ public class ProductDto {
 	private Long productId;
 	private String name;
 	private String description;
-	private Long price;
+	private Double price;
 	private String vendorCode;
 	private String barCode;
 	private Status status;
 	private int version;
 	
 	public static ProductDto from(Product product) {
-		return new ProductDto(product.getId(), product.getName(), product.getDescription(), product.getPrice(), product.getVendorCode(),
+		Double price = product.getPrice().doubleValue() / 100;
+		return new ProductDto(product.getId(), product.getName(), product.getDescription(), price, product.getVendorCode(),
 				product.getBarCode(), product.getStatus(), product.getVersion());
 	}
 	
-	public ProductDto(Long productId, String name, String description, Long price, String vendorCode, String barCode,
+	public ProductDto(Long productId, String name, String description, Double price, String vendorCode, String barCode,
 			Status status, int version) {
 		this.productId = productId;
 		this.name = name;
@@ -34,14 +35,15 @@ public class ProductDto {
 	}
 
 	public Product toProduct() {
+		Long price = Math.round(this.price * 100);
 		Product product = new Product();
 		
-		product.setName(this.getName());
-		product.setDescription(this.getDescription());
-		product.setPrice(this.getPrice());
-		product.setVendorCode(this.getVendorCode());
-		product.setBarCode(this.getBarCode());
-		product.setStatus(this.getStatus());
+		product.setName(this.name);
+		product.setDescription(this.description);
+		product.setPrice(price);
+		product.setVendorCode(this.vendorCode);
+		product.setBarCode(this.barCode);
+		product.setStatus(this.status);
 		
 		return product;
 	}
@@ -70,11 +72,11 @@ public class ProductDto {
 		this.description = description;
 	}
 
-	public Long getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Long price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
