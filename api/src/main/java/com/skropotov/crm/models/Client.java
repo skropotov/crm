@@ -1,21 +1,28 @@
 package com.skropotov.crm.models;
 
+import java.util.List;
+
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "clients")
+@Table(name = "clients", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"}, name = Client.clientNameConstraintName)})
 @AttributeOverride(column = @Column(name = "client_id"), name = "id")
 public class Client extends BaseEntity {
+	public final static String clientNameConstraintName = "client_name_uk";
+	
 	@Column
 	private String name;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(optional = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "manager_id") 
 	private User manager;
 	
@@ -30,6 +37,9 @@ public class Client extends BaseEntity {
 	
 	@Column
 	private String address;
+	
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Order> orders;
 
 	public Client() {
 	}
