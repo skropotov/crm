@@ -7,21 +7,21 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(content = Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ErrorDTO {
-	private String errorCode;
+	private String object;
 	private String message;
 
-	public ErrorDTO(String errorCode, String message) {
+	public ErrorDTO(String object, String message) {
 		super();
-		this.errorCode = errorCode;
+		this.object = object;
 		this.message = message;
 	}
 
-	public String getErrorCode() {
-		return errorCode;
+	public String getObject() {
+		return object;
 	}
 
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
+	public void setObject(String object) {
+		this.object = object;
 	}
 
 	public String getMessage() {
