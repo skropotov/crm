@@ -91,5 +91,10 @@ public class Client extends BaseEntity {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
+	@Override
+	public String toString() {
+		return this.name;
+	}
 	
 }

@@ -3,33 +3,35 @@ package com.skropotov.crm.transfers;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import com.skropotov.crm.models.Client;
 import com.skropotov.crm.models.Order;
-import com.skropotov.crm.models.Product;
 import com.skropotov.crm.models.Status;
 
 public class OrderDto {
 	private Long orderId;
 	private String orderDate;
 	private Long clientId;
+	private String clientName;
 	private Long productId;
+	private String productName;
 	private Long amount;
 	private Status status;
 	private int version;
 
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.MM.yyyy"); 
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); 
 	
 	public static OrderDto from(Order order) {
-		return new OrderDto(order.getId(), order.getOrderDate().format(formatter), order.getClient().getId(), order.getProduct().getId(),
-				order.getAmount(), order.getStatus(), order.getVersion());
+		return new OrderDto(order.getId(), order.getOrderDate().format(formatter), order.getClient().getId(), order.getClient().toString(), 
+				order.getProduct().getId(), order.getProduct().toString(), order.getAmount(), order.getStatus(), order.getVersion());
 	}
 	
-	public OrderDto(Long orderId, String orderDate, Long clientId, Long productId, Long amount, Status status,
+	public OrderDto(Long orderId, String orderDate, Long clientId, String clientName, Long productId, String productName, Long amount, Status status,
 			int version) {
 		this.orderId = orderId;
 		this.orderDate = orderDate;
 		this.clientId = clientId;
+		this.clientName = clientName;
 		this.productId = productId;
+		this.productName = productName;
 		this.amount = amount;
 		this.status = status;
 		this.version = version;
@@ -102,6 +104,22 @@ public class OrderDto {
 
 	public void setVersion(int version) {
 		this.version = version;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	
 }

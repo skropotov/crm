@@ -71,4 +71,9 @@ public class Product extends BaseEntity {
 	public void setBarCode(String barCode) {
 		this.barCode = barCode;
 	}
+
+	@Override
+	public String toString() {
+		return this.name + "(" + description + ")";
+	}
 }
