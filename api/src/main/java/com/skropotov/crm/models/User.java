@@ -117,7 +117,7 @@ public class User extends BaseEntity implements UserDetails {
 
 	@Override
 	public String toString() {
-		return "User [username=" + username + "]";
+		return this.lastName + " " + this.firstName;
 	}
 	
 }
